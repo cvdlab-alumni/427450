@@ -129,7 +129,95 @@ floor2    = STRUCT([OttagonoInternoTetto2])
 floor2		= T(3)(5.9)(floor2) 					
 floor2		= COLOR(GREEN)(floor2)
 
+
+Colonna	  = CUBOID([2.6,3]);
+
+Finestra  = CIRCLE(0.1)([30,1]);
+Finestra1	= CUBOID([0.2,0.4]);
+Finestra1	= T(1)(-0.1)(Finestra1)
+Finestra1	= STRUCT([Finestra,Finestra1])
+Finestra1	= T(1)(1.3)(Finestra1)
+Finestra1	= T(2)(1.1)(Finestra1)
+Finestra2	= CUBOID([0.2,0.4]);
+Finestra2	= T(1)(-0.1)(Finestra2)
+Finestra2	= STRUCT([Finestra,Finestra2])
+Finestra2	= T(1)(1.3)(Finestra2)
+Finestra2	= T(2)(1.7)(Finestra2)
+
+Facciata 	= DIFFERENCE([Colonna, Finestra1])
+Facciata1	= R([1,3])(PI/8)(Facciata)
+Facciata1 = T(3)(-5.2)(Facciata1)
+Facciata1	= T(1)(0.73)(Facciata1)
+Facciata1	= T(2)(-3)(Facciata1)
+
+FacciataG 	= DIFFERENCE([Colonna, Finestra2])
+Facciata1G	= R([1,3])(PI/8)(FacciataG)
+Facciata1G  = T(3)(-5.2)(Facciata1G)
+Facciata1G	= T(1)(0.73)(Facciata1G)
+Facciata1G	= T(2)(-6)(Facciata1G)
+
+north  = STRUCT([Facciata1, Facciata1G])
+
+Facciata8	  = T(3)(9.4)(Facciata1)
+Facciata8	  = T(1)(-3.9)(Facciata8)
+Facciata8G	= T(3)(9.4)(Facciata1G)
+Facciata8G	= T(1)(-3.9)(Facciata8G)
+
+south       = STRUCT([Facciata8, Facciata8G])
+
+Facciata3 = T(3)(5.1)(Facciata)
+Facciata3 = T(1)(-1.3)(Facciata3)
+Facciata3	= R([1,3])(7*PI/8)(Facciata3)
+Facciata3	= T(2)(-3)(Facciata3)
+Facciata3G = T(3)(5.1)(FacciataG)
+Facciata3G = T(1)(-1.3)(Facciata3G)
+Facciata3G = R([1,3])(7*PI/8)(Facciata3G)
+Facciata3G = T(2)(-6)(Facciata3G)
+
+nord_west  = STRUCT([Facciata3, Facciata3G]) 
+
+Facciata6	  = T(3)(9.4)(Facciata3)
+Facciata6	  = T(1)(3.9)(Facciata6)
+Facciata6G	= T(3)(9.4)(Facciata3G)
+Facciata6G	= T(1)(3.9)(Facciata6G)
+
+nord_east = STRUCT([Facciata6, Facciata6G])
+
+Facciata4  = R([1,3])(5*PI/8)(Facciata)
+Facciata4	 = T(3)(0.7)(Facciata4)
+Facciata4	 = T(1)(5.2)(Facciata4)
+Facciata4  = T(2)(-3)(Facciata4)
+Facciata4G = R([1,3])(5*PI/8)(FacciataG)
+Facciata4G = T(3)(0.7)(Facciata4G)
+Facciata4G = T(1)(5.2)(Facciata4G)
+Facciata4G = T(2)(-6)(Facciata4G)
+
+east = STRUCT([Facciata4, Facciata4G])
+
+Facciata5	 = T(1)(-9.4)(Facciata4)
+Facciata5  = T(3)(-3.9)(Facciata5)
+Facciata5G = T(1)(-9.4)(Facciata4G)
+Facciata5G = T(3)(-3.9)(Facciata5G)
+
+west = STRUCT([Facciata5, Facciata5G])
+
+Facciata7  = R([1,3])(3*PI/8)(Facciata)
+Facciata7	 = T(3)(-3.2)(Facciata7)
+Facciata7	 = T(1)(4.2)(Facciata7)
+Facciata7  = T(2)(-3)(Facciata7)
+Facciata7G = R([1,3])(3*PI/8)(FacciataG)
+Facciata7G = T(3)(-3.2)(Facciata7G)
+Facciata7G = T(1)(4.2)(Facciata7G)
+Facciata7G = T(2)(-6)(Facciata7G)
+
+sud_east  = STRUCT([Facciata7, Facciata7G])
+
+Facciate = STRUCT([north, east, south, nord_west, nord_east, west, sud_east])
 building  = STRUCT([floor0,floor1,floor2])
 
+building	= R([2,3])(PI/2)(building)
 
-VIEW(building);
+mock_up_3D = STRUCT([building, Facciate])
+mock_up_3D	= R([2,3])(-PI/2)(mock_up_3D)
+
+VIEW(mock_up_3D);
