@@ -97,6 +97,7 @@ OttagonoLateralG8 = T(2)(-4.2)(OttagonoLateralG8)
 OttagoniLateraliG     = STRUCT([OttagonoLateralG1, OttagonoLateralG2, OttagonoLateralG3, OttagonoLateralG4,
 													     OttagonoLateralG5, OttagonoLateralG6, OttagonoLateralG7, OttagonoLateralG8 
 													    ])
+
 OttagonoInternoMura2  = CIRCLE(5.0)([8,1]);
 OttagonoInternoTetto2 = CIRCLE(2.2)([8,1]);
 OttagonoInternoTetto2 = DIFFERENCE([OttagonoInternoMura2, OttagonoInternoTetto2])
@@ -106,7 +107,7 @@ OttagonoEsternoMura1	= DIFFERENCE([CIRCLE(5.8)([8,1]),OttagonoEsternoMura1 ]);
 
 floor1  = STRUCT([OttagonoEsternoMura1, OttagoniLateraliG, Frontone])
 floor1	= T(3)(3)(floor1) 					
-floor1	= COLOR(RED)(floor1)
+floor1	= COLOR(BROWN)(floor1)
 
 
 Ingresso	= CUBOID([0.6,3]);
@@ -127,7 +128,7 @@ floor0     = STRUCT([OttagoniF0, OttagoniLaterali, Vicoli, Ingresso])
 
 floor2    = STRUCT([OttagonoInternoTetto2])
 floor2		= T(3)(5.9)(floor2) 					
-floor2		= COLOR(GREEN)(floor2)
+floor2		= COLOR(BROWN)(floor2)
 
 
 Colonna	  = CUBOID([2.6,3]);
@@ -214,9 +215,33 @@ sud_east  = STRUCT([Facciata7, Facciata7G])
 
 Facciate = STRUCT([north, east, south, nord_west, nord_east, west, sud_east])
 
-two_and_half_model  = STRUCT([floor0,floor1,floor2])
-two_and_half_model	= R([2,3])(PI/2)(two_and_half_model)
-mock_up_3D = STRUCT([two_and_half_model, Facciate])
-mock_up_3D	= R([2,3])(-PI/2)(mock_up_3D)
+floor0 = EXTRUDE([1,floor0,3])
+floor10 = T(3)(2.8)(floor0)
+floor11 = EXTRUDE([1,OttagonoEsterno,0.5])
+floor11 = T(3)(5.8)(floor11)
+floor21 = EXTRUDE([1,OttagoniLaterali,1])
+floor21 = T(3)(5.8)(floor21)
+building  = STRUCT([floor0,floor1,floor10, floor11 ,floor2, floor21])
+building	= R([2,3])(PI/2)(building)
+mock_up_3D = STRUCT([building])
 
-VIEW(mock_up_3D);
+solid_model_3D =  R([2,3])(-PI/2)(mock_up_3D)
+
+prato = COLOR(GREEN)(CUBOID([20,20]))
+prato = R([2,3])(PI/2)(prato)
+prato = T(1)(-10)(prato)
+prato = T(3)(-10)(prato)
+
+
+step2D = MKPOL([[[0,0],[0,0.09],[0.1,0.09/2],[0.1,0.09]],[[1,2,3,4]],None])
+step3D = PROD([step2D,Q(0.99)])
+step3D = MAP([S1,S3,S2])(step3D)
+ramp = STRUCT(NN(13)(([step3D,T([1,3])([0.1,0.09/2])])))
+stair = T(1)(-7)(ramp)
+stair = R([2,3])(PI/2)(stair)
+stair = R([1,3])(PI/8)(stair)
+stair = T(3)(3)(stair)
+
+building = STRUCT([prato, building, stair])
+VIEW(building)
+

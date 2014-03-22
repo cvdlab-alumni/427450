@@ -129,7 +129,7 @@ floor2    = STRUCT([OttagonoInternoTetto2])
 floor2		= T(3)(5.9)(floor2) 					
 floor2		= COLOR(GREEN)(floor2)
 
-building  = STRUCT([floor0,floor1,floor2])
+two_and_half_model  = STRUCT([floor0,floor1,floor2])
 
 
-VIEW(building);
+VIEW(two_and_half_model);

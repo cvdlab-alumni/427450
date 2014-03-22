@@ -223,9 +223,9 @@ floor11 = T(3)(5.8)(floor11)
 floor21 = EXTRUDE([1,OttagoniLaterali,1])
 floor21 = T(3)(5.8)(floor21)
 
-building  = STRUCT([floor0,floor1,floor10, floor11 ,floor2, floor21])
-building	= R([2,3])(PI/2)(building)
-mock_up_3D = STRUCT([building])
+two_and_half_model  = STRUCT([floor0,floor1,floor10, floor11 ,floor2, floor21])
+two_and_half_model	= R([2,3])(PI/2)(two_and_half_model)
+mock_up_3D = STRUCT([two_and_half_model])
 
 solid_model_3D =  R([2,3])(-PI/2)(mock_up_3D)
 
