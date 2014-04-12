@@ -7,8 +7,13 @@ def extrude(obj,z):
 def REDGREENBLUE(color):
 	return [color[0]/255.0, color[1]/255.0, color[2]/255.0]
 
-TERRA = REDGREENBLUE([117,102,63])
-
+TERRA    = REDGREENBLUE([117,102,63])
+VERDE    = REDGREENBLUE([0,128,0])
+CELESTE  = REDGREENBLUE([153,203,255])
+CASTAGNO = REDGREENBLUE([205,	92,	92]) 
+GRIGIO   = REDGREENBLUE([220, 220,220])
+TRONCO   = REDGREENBLUE([169,131,7])	 
+BISCOTTO = REDGREENBLUE([255,228,196])	
 
 OttagonoEsternoMura  = CIRCLE(5.5)([8,1]);
 OttagonoEsterno      = CIRCLE(4.8)([8,1]);
@@ -313,14 +318,43 @@ floor2		= COLOR(BROWN)(floor2)
 floor21 = EXTRUDE([1,OttagoniLaterali,7])
 
 
-prato = COLOR(GREEN)(CUBOID([50,50]))
-prato = T(1)(-25)(prato)
-prato = T(2)(-25)(prato)
-prato = T(3)(-0.1)(prato)
-piazzale = COLOR(TERRA)(CIRCLE(10)([25,1]));
+prato    = COLOR(VERDE)(CUBOID([110,110]))
+prato    = T(1)(-55)(prato)
+prato    = T(2)(-55)(prato)
+prato    = T(3)(-0.1)(prato)
+piazzaleG = COLOR(TERRA)(CIRCLE(25)([25,1]));
+piazzale = COLOR(BISCOTTO)(CIRCLE(10)([25,1]));
+
+casale  = CUBOID([5,10,3])
+casale  = T(2)(26)(casale)
+casale2 = CUBOID([5.3,8,2])
+casale2 = T(2)(27)(casale2)
+casale2 = T(1)(-3.5)(casale2)
+casale  = STRUCT([casale, casale2])
+casale  = R([1,2])(PI/8)(casale)
+casale  = COLOR(GRIGIO)(casale) 
 
 
+casale3  = CUBOID([2,10,3])
+casale4  = CUBOID([2.8,8,3])
+casale5  = CUBOID([3.6,6,3])
+casale4  = T(2)(2)(casale4)
+casale5  = T(2)(4)(casale5)
+casale45 = STRUCT([casale4,casale5]) 
+casale2  = STRUCT([casale3, casale45])
+casale2  = T(2)(29)(casale2)
+casale2  = T(1)(-18)(casale2)
+casale2  = R([1,2])(PI/8)(casale2)
+casale2  = COLOR(CASTAGNO)(casale2) 
 
-building  = STRUCT([floor0,floor1,floor2, prato,piazzale, floor21])
-VIEW(building);
+casale3 = CUBOID([4,5,3])
+casale3 = T(2)(12)(casale3)
+casale3 = T(1)(-16)(casale3)
+casale3 = COLOR(CELESTE)(casale3)
+
+
+building  = STRUCT([ floor0, floor1, floor2, prato, floor21, 
+										 piazzale, piazzaleG, 
+										 casale, casale2, casale3])
+VIEW(building)
 
