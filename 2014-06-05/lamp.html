@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html>
+ <head> 
+
+  <title>Lamp</title> 
+
+  <link rel="stylesheet" href="assets/css/mycss.css">
+
+
+  <!-- JavaScript libraries -->
+  <script src="assets/jquery.min.js"></script> 
+  <script src="assets/three.min.js"></script>
+  <script src="assets/stats.min.js"></script>
+  <script src="assets/dat.gui.min.js"></script>
+  <script src="assets/trackball-control.js"></script>
+  <script src="assets/tween.min.js"></script>
+
+  <script src="assets/helvetica.js"></script>
+  <script src="textures/wood.js"></script> 
+  <script src="textures/quaderno.js"></script> 
+
+  </head>
+  <body>
+
+    <div id ="information">
+      Move your mouse for see the details.
+      </br>
+      Enjoy with the animations,
+      </br>
+      it's possible to stop it or start it in the same time.
+    </div>
+
+    <script>
+      !function () {
+        
+        var stats = initStats();        
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        var renderer = new THREE.WebGLRenderer();
+        var axisHelper = new THREE.AxisHelper(10);
+        axisHelper.visible = false;
+        scene.add(axisHelper);
+
+        camera.position.set(20,90,60);
+        camera.up = new THREE.Vector3(0,1,0);
+        camera.lookAt(scene.position);
+
+        light = new THREE.DirectionalLight( 0xfff000 );
+        light.position.set( 3, 1, 1 );
+        scene.add( light );
+        light = new THREE.AmbientLight( 0x222222 );
+        scene.add( light );
+    
+        renderer.setClearColor(new THREE.Color(0xeeeeee, 1.0));
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      
+        controlsMouse = new THREE.TrackballControls( camera );
+        controlsMouse.rotateSpeed = 1.0;
+        controlsMouse.zoomSpeed = 1.2;
+        controlsMouse.panSpeed = 0.8;
+        controlsMouse.noZoom = false;
+        controlsMouse.noPan = false;
+        controlsMouse.staticMoving = true;
+        controlsMouse.dynamicDampingFactor = 0.3;
+       
+        //animate method lauch after setting all variable for the scene
+        animate();
+
+        var quadernoTexture = new THREE.Texture( quaderno )
+        quaderno.addEventListener( 'load', function ( event ) {
+          quadernoTexture.needsUpdate = true;
+        }); 
+
+        var woodTexture = new THREE.Texture( wood );
+        wood.addEventListener( 'load', function ( event ) {
+          woodTexture.needsUpdate = true;
+        });   
+
+
+        function mkJoint(radius, height){
+          var joint =new THREE.Object3D();
+          var sphereGeometry = new THREE.SphereGeometry(radius,50,50);
+          var sphereMaterial = new THREE.MeshPhongMaterial( {specular: 0xffffff, color: 0xADB2BD, shininess: 100, metal: true } );
+          var sphere = new THREE.Mesh(sphereGeometry,sphereMaterial);
+          joint.add(sphere);
+
+          var cylinderGeometry = new THREE.CylinderGeometry(radius,radius,height,50,50);
+          var cylinderMaterial = new THREE.MeshPhongMaterial( {specular: 0xffffff, color: 0x9999CC, shininess: 100, metal: true } );
+          var cylinder = new THREE.Mesh(cylinderGeometry,cylinderMaterial);
+          cylinder.position.set(0, height/2 + radius, 0);
+          sphere.add(cylinder);
+
+          var hook = new THREE.Object3D();
+          hook.position.set(0, height/2 + radius, 0);
+          cylinder.add(hook);
+
+          joint.sphere = sphere;
+          joint.cylinder = cylinder;
+          joint.hook = hook;
+
+          return joint;
+        }
+
+        var r = 1;
+        var h = 10;
+
+        var joint1 = mkJoint(r,h);
+        var joint2 = mkJoint(r,h);
+        joint1.hook.add(joint2);
+
+        var sphereGeometry = new THREE.SphereGeometry(1,50,50);
+        var sphereMaterial = new THREE.MeshLambertMaterial({color: 0xADB2BD, shading: THREE.FlatShading});
+        var sphere2 = new THREE.Mesh(sphereGeometry,sphereMaterial);
+        joint2.hook.add(sphere2);
+
+        var tableGeometry =  new THREE.BoxGeometry(90,90, 3, 1);
+        var tableMaterial =  new THREE.MeshLambertMaterial({ map:  woodTexture})
+        var table = new THREE.Mesh(tableGeometry,tableMaterial);
+        table.side = THREE.DoubleSide
+        table.position.set(0,-3.40,0);
+        table.rotation.x = Math.PI/2;
+
+        var completeTable = new THREE.Object3D();
+        for(var i=0; i<4; i++){
+          var zampaGeometry = new THREE.CylinderGeometry(2,2,50,50,50);
+          var zampaMaterial = new THREE.MeshLambertMaterial({ map:  woodTexture})
+          var zampa =  new THREE.Mesh(zampaGeometry,zampaMaterial);
+          zampa.side = THREE.DoubleSide
+          switch(i){
+            case 0:
+              zampa.position.set(43,-28.40,43)
+            break;
+            case 1:
+              zampa.position.set(-43,-28.40,43)
+            break;
+            case 2:
+              zampa.position.set(43,-28.40,-43)
+            break;
+            case 3:
+              zampa.position.set(-43,-28.40,-43)
+            break;
+          }
+          completeTable.add(zampa)
+        };
+        completeTable.add(table);
+        completeTable.receiveShadow = true;
+        completeTable.castShadow = true;
+
+        var baseGeometry = new THREE.CylinderGeometry(5,5,1,50,50);
+        var baseMaterial = new THREE.MeshPhongMaterial( {specular: 0xffffff, color: 0xADB2BD, shininess: 100, metal: true } );
+        var base = new THREE.Mesh(baseGeometry,baseMaterial);
+        baseMaterial.side = THREE.DoubleSide
+        base.position.set(0,-1.4,0);
+
+        var cupolaGeometry = new THREE.SphereGeometry( 5, 32, 16, 0, 2 * Math.PI, 0, Math.PI / 2 );
+        var cupolaMaterial = new THREE.MeshPhongMaterial( {specular: 0xffffff, color: 0xADB2BD, shininess: 100, metal: true } );
+        var cupola = new THREE.Mesh(cupolaGeometry,cupolaMaterial);
+        cupolaMaterial.side = THREE.DoubleSide
+        cupola.position.set(0, 5.5, 0);
+        cupola.rotation.x = Math.PI;
+        
+        var lampGeometry = new THREE.SphereGeometry(2,50,50);
+        var lampMaterial = new THREE.MeshNormalMaterial( { color: 0xffffff , transparent: true, opacity: 0.5 } );
+        var lamp = new THREE.Mesh(lampGeometry,lampMaterial);
+        lamp.position.set(0, 3, 0);
+        lamp.rotation.z =  Math.PI/5;
+
+        var joint3 = new THREE.Object3D();
+        joint3.add(cupola);
+        joint3.add(lamp);
+        joint2.hook.add(joint3)
+        joint2.rotation.z = 1;
+        joint2.rotation.y = 2.4;
+        joint3.rotation.z = 1;
+
+        var completeLamp = new THREE.Object3D();
+        var lampElement = [base, joint1]
+        for (var i=0; i<lampElement.length;i++){
+           completeLamp.add(lampElement[i]);
+        }
+        
+        var bookGeometry = new THREE.BoxGeometry(17,1,23.8,50,50);
+        var bookMaterial = new THREE.MeshLambertMaterial({map: quadernoTexture});
+        var book = new THREE.Mesh(bookGeometry,bookMaterial);
+        book.castShadow = true;
+        book.position.set(25,-1.5,25)
+
+        lampLight = new THREE.SpotLight( 0xffffff, 10, 50 , Math.PI);
+        lampLight.castShadow = true;
+        lampLight.receiveShadow = true;
+        lampLight.target = lamp;
+        lampLight.intensity = 0;
+
+
+        var textMaterial = new THREE.MeshPhongMaterial({color: 0xFF9900});
+        var textGeom     = new THREE.TextGeometry( 'CDV-lab', {size: 13, height: 3, curveSegments: 15,font: "helvetica"});
+        var text = new THREE.Mesh( textGeom, textMaterial );
+        text.position.x = -30;
+        text.position.y = -1.5;
+        text.position.z = -25;
+        text.rotation.y = Math.PI * 2;
+
+
+        completeLamp.position.x = -6;
+        completeLamp.position.z = -3;
+
+        scene.add( text );
+        scene.add( completeTable );
+        scene.add( completeLamp );
+        lamp.add(lampLight);
+        scene.add(book)
+
+
+        $('body').append(renderer.domElement);
+
+        var switchCount = 0;
+        var controls = new function () {
+          
+          var stopIntervalIdLamp = undefined;
+          var stopIntervalIdText = undefined;
+          var stopIntervalIdDance = undefined;
+
+          this.alpha = 0.0;
+          this.beta = 0.0;
+          this.gamma = 1.0;
+          this.delta = 2.4;
+          this.epsilon = 1.0;
+          this.switch = false;
+          this.x = completeLamp.position.x;
+          this.y = completeLamp.position.z;
+          this.showAxis = false;
+          this.showStats = true;
+          this.animateLamp = function(){
+            if(stopIntervalIdLamp){
+              $($('.cr.function')[0]).html('AnimateLamp');
+              clearInterval(stopIntervalIdLamp);
+              stopIntervalIdLamp = undefined;
+            }else{
+              var lampJumpUp = new TWEEN.Tween(completeLamp.position)
+                           .to({y:4},300)
+                           .easing(TWEEN.Easing.Linear.None)
+              var lampJumpDown = new TWEEN.Tween(completeLamp.position)
+                           .to({y:0},300)
+                           .easing(TWEEN.Easing.Linear.None)
+              $($('.cr.function')[0]).html('Stop Animate');
+              stopIntervalIdLamp = setInterval(function(){
+                 lampJumpUp.start();
+                 setTimeout(function(){lampJumpDown.start()}, 300);
+              }, 600);
+            }
+          }
+          this.animateText = function(){
+            if(stopIntervalIdText){
+              $($('.cr.function')[1]).html('AnimateText');
+              clearInterval(stopIntervalIdText);
+              stopIntervalIdText = undefined;
+            }else{
+               var lampJumpUp = new TWEEN.Tween(text.position)
+                           .to({y:4},300)
+                           .easing(TWEEN.Easing.Linear.None)
+              var lampJumpDown = new TWEEN.Tween(text.position)
+                           .to({y:0},300)
+                           .easing(TWEEN.Easing.Linear.None)
+              $($('.cr.function')[1]).html('Stop Animate');
+              stopIntervalIdText = setInterval(function(){
+                 lampJumpUp.start();
+                 setTimeout(function(){lampJumpDown.start()}, 300);
+              }, 600);
+            }
+          }
+          this.dance = function(){
+              function getRandomArbitrary(min, max) {
+                return Math.random() * (max - min) + min;
+              }
+              if(stopIntervalIdDance){
+                $($('.cr.function')[2]).html('Dance');
+                clearInterval(stopIntervalIdDance);
+                stopIntervalIdDance = undefined;
+              }else{
+                $($('.cr.function')[2]).html('Stop Dance');
+                stopIntervalIdDance = setInterval(function(){
+                 new TWEEN.Tween(joint3.rotation)
+                   .to({z:getRandomArbitrary(0,Math.PI/2)},500)
+                   .easing(TWEEN.Easing.Linear.None).start()
+                 new TWEEN.Tween(joint2.rotation)
+                   .to({y:getRandomArbitrary(0,2*Math.PI)},500)
+                   .easing(TWEEN.Easing.Linear.None).start()
+                 new TWEEN.Tween(completeLamp.position)
+                   .to({z:getRandomArbitrary(-10,10), x:getRandomArbitrary(-10,10)},500)
+                   .easing(TWEEN.Easing.Linear.None).start()
+                }, 500);
+              }
+          }
+        }   
+
+        var gui = new dat.GUI();
+
+        gui.add(controls, 'alpha',0.0,2*Math.PI).onChange(function (e) {
+            completeLamp.rotation.y = e
+        });
+
+        gui.add(controls, 'beta',0.0,Math.PI/2).onChange(function (e) {
+           joint1.rotation.x = e
+        });
+
+        gui.add(controls, 'gamma',0,Math.PI/2).onChange(function (e) {
+            joint2.rotation.z = e
+        });
+      
+        gui.add(controls, 'delta',0,2*Math.PI).listen().onChange(function (e) {
+            joint2.rotation.y = e
+        })
+
+        gui.add(controls, 'epsilon',0,Math.PI/2).listen().onChange(function (e) {
+            joint3.rotation.z = e
+        })
+
+        gui.add(controls, 'switch', 0, 0).onChange(function (e) {
+          if(e && switchCount == 5){
+            alert('Si fulmina')
+            switchCount=0;  
+          }else{
+            if (e) {
+              lampLight.intensity = 10.0;
+              lamp.material = new THREE.MeshLambertMaterial({color: 0xffffff, transparent: true, opacity: 0.5}); 
+              switchCount++;           
+            }else{
+              lampLight.intensity = 0;
+              lamp.material = new  THREE.MeshNormalMaterial( { color: 0xffffff , transparent: true, opacity: 0.5 } );
+            }  
+          }    
+        
+        })
+        gui.add(controls, 'x').listen();
+        gui.add(controls, 'y').listen();
+        gui.add(controls, 'showAxis',0,0).onChange(function (e){
+          if(e){
+            axisHelper.visible = true; 
+          }else{
+            axisHelper.visible = false;
+          }
+        });
+        gui.add(controls, 'showStats', 0, 0).onChange(function (e) {
+           $('#stats').toggle()
+        })
+        gui.add(controls, 'animateLamp');
+        gui.add(controls, 'animateText');
+        gui.add(controls, 'dance');
+
+
+        function animate() {
+          requestAnimationFrame( animate );
+          render();
+        }
+
+        function controlsUpdate(){
+          if(controls && completeLamp){
+            controls.x       = completeLamp.position.x;
+            controls.y       = completeLamp.position.z;
+            controls.delta   = joint2.rotation.y
+            controls.epsilon = joint3.rotation.z
+          }
+        }
+
+        function render() {
+          stats.update();
+          controlsMouse.update();
+          TWEEN.update();
+          controlsUpdate();
+          renderer.render( scene, camera );
+        }
+
+        function initStats() {
+          var stats = new Stats();
+          stats.setMode(0); // 0: fps, 1: ms
+          $('body').append(stats.domElement);
+          return stats;
+        }
+ 
+      }();
+    </script>  
+ </body>
+</html>
