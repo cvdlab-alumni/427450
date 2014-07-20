@@ -1,0 +1,27 @@
+# File produced by Open Asset Import Library (http://www.assimp.sf.net)
+# (assimp v3.0.1270)
+
+newmtl MetalChrome
+kd 0 0 0
+ka 0 0 0
+ks 1 1 1
+d 1
+Ns 80
+illum 2
+
+newmtl BLACK MATTE
+kd 0.133333 0.133333 0.133333
+ka 0 0 0
+ks 1 1 1
+d 1
+Ns 5
+illum 2
+
+newmtl BLACK PLSTC
+kd 0.00784314 0.00784314 0.00784314
+ka 0.00392157 0.00392157 0.00392157
+ks 1 1 1
+d 1
+Ns 53
+illum 2
+

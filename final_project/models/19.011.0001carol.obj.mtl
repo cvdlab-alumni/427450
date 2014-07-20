@@ -1,0 +1,55 @@
+# File produced by Open Asset Import Library (http://www.assimp.sf.net)
+# (assimp v3.0.1270)
+
+newmtl 09 - Default
+kd 0.784314 0.784314 0.784314
+ka 0.784314 0.784314 0.784314
+ks 0.952941 0.952941 0.952941
+d 1
+Ns 28
+illum 2
+map_kd WOOD06.JPG
+
+newmtl 05 - Default
+kd 1 1 1
+ka 1 1 1
+ks 0.952941 0.952941 0.952941
+d 1
+Ns 12
+illum 2
+
+newmtl 02 - Default
+kd 0.784314 0.784314 0.784314
+ka 0.784314 0.784314 0.784314
+ks 0.952941 0.952941 0.952941
+d 1
+Ns 24
+illum 2
+map_kd AVODIRE.JPG
+
+newmtl pedra
+kd 0.784314 0.784314 0.784314
+ka 0.784314 0.784314 0.784314
+ks 0.952941 0.952941 0.952941
+d 1
+Ns 5
+illum 2
+map_kd AVODIRE.JPG
+
+newmtl 10- Default
+kd 0.784314 0.784314 0.784314
+ka 0.784314 0.784314 0.784314
+ks 0.952941 0.952941 0.952941
+d 1
+Ns 20
+illum 2
+map_kd AVODIRE.JPG
+
+newmtl 03 - Default
+kd 1 1 1
+ka 1 1 1
+ks 0.952941 0.952941 0.952941
+d 1
+Ns 51
+illum 2
+

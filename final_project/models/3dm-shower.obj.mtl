@@ -1,0 +1,37 @@
+# File produced by Open Asset Import Library (http://www.assimp.sf.net)
+# (assimp v3.0.1270)
+
+newmtl 1-CLEAR-PLAS
+kd 0 0 0.0470588
+ka 0 0 0.0117647
+ks 1 1 1
+d 0.38
+Ns 33
+illum 2
+
+newmtl WHITE PLSTC
+kd 0.898039 0.898039 0.898039
+ka 0.0352941 0.0352941 0.0352941
+ks 1 1 1
+d 1
+Ns 53
+illum 2
+
+newmtl BLUE PLASTIC
+kd 0.00392157 0.0352941 0.462745
+ka 0 0.00392157 0.0745098
+ks 1 1 1
+d 1
+Ns 43
+illum 2
+
+newmtl GOLD S1
+kd 0.694118 0.611765 0.254902
+ka 0.0901961 0.0666667 0.0392157
+ks 1 1 1
+d 1
+Ns 77
+illum 2
+bump REFMAP.TGA
+map_bump REFMAP.TGA
+

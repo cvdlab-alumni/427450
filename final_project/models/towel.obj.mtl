@@ -1,0 +1,19 @@
+# File produced by Open Asset Import Library (http://www.assimp.sf.net)
+# (assimp v3.0.1270)
+
+newmtl 03 - Default
+kd 1 1 1
+ka 1 1 1
+ks 0.952941 0.952941 0.952941
+d 1
+illum 1
+map_kd CLOTH11.JPG
+
+newmtl 01 - Default
+kd 0.611765 0.611765 0.611765
+ka 0 0 0
+ks 0.752941 0.752941 0.752941
+d 1
+Ns 100
+illum 2
+

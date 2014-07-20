@@ -1,0 +1,28 @@
+ body{
+      margin: 0;
+      overflow: hidden;
+    }
+
+    #stats {  /* Align stats top-left */
+      position: absolute;
+      left: 0px;
+      top: 0px;
+    }
+
+  #pointer {
+     position: fixed;
+     top: 50%;
+     left: 50%;
+     margin-top: -15px;
+     margin-left: -15px;
+     width: 30px;
+     height: 30px;
+     display: none;
+     background-image: url("../images/pointer.png");
+     background-repeat: no-repeat;
+     background-size: contain;
+  }
+  #live_video{
+    top: 50px;
+    left: 0px;
+  }
